@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* margin bottom transition should only apply when unhovering */
+/*.nav-link {
+    /*inline-block px-5 py-3 bg-black border-b-yellow-500 mb-0 hover:border-b-4 hover:-mb-[4px] transition-[border-width] duration-75*/
+    /*@apply inline-block px-5 py-3 bg-black border-b-yellow-500 mb-0 hover:border-b-4 hover:-mb-[4px] ;
+    transition: border-width 75ms linear 0ms, margin-bottom 0ms linear 75ms;
+}
+.nav-link:hover {
+    transition: border-width 75ms linear 0ms;
+}*/
+
+.full-rotate {
+    transform: translateY(-10%) rotate3d(0, 1, 0, 180deg);
+}

@@ -1,0 +1,7 @@
+.vscode
+node_modules
+
+public/**/*
+src/views/layouts/index.ejs
+*.sh
+*.env

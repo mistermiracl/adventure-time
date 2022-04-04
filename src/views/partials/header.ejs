@@ -1,0 +1,16 @@
+<header class="pb-6 text-center">
+    <!-- Adventure Time - Watch every episode! -->
+    <img class="inline w-96" src="/img/logo.png" alt="">
+    <nav id="mainNav">
+        <ul class="list-none">
+            <%/* nifty negative margin to compensate the dynamic height, so on hover when the border increases the height the negative margin moves the nav up by the same amount giving the feeling of not having moved at all, it fucks up the transitions though*/%>
+            <%/* inline-block px-5 py-3 bg-black border-b-yellow-500 mb-0 hover:border-b-4 hover:-mb-[4px] transition-[border-width] duration-75 */%>
+            <%/* arbitrary, well, rem based height to give border-box space to work so that the container doesnt grow when adding the border */%>
+            <li class="inline-block h-12">
+                <a class="inline-block px-5 py-3 bg-black border-b-0 border-b-yellow-500 hover:border-b-4 transition-[border-width] duration-75 <%= currentUrl === '/' ? 'font-bold' : '' %>" href="/">Home</a>
+            </li><li class="inline-block h-12">
+                <a class="inline-block px-5 py-3 bg-black border-b-0 border-b-yellow-500 hover:border-b-4 transition-[border-width] duration-75 <%= currentUrl === '/season' ? 'font-bold' : '' %>" href="/season">Seasons</a>
+            </li>
+        </ul>
+    </nav>
+</header>
