@@ -7,12 +7,13 @@ const middleware = require('./middleware');
 
 const app = express();
 
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/', express.static(path.join(path.dirname(__dirname), 'public')));
 // views path
-app.set('views', './views');
+app.set('views', path.join(__dirname, 'views'));
+// view engine
 app.set('view engine', 'ejs');
-app.use(expressLayouts);
 // default views layout
+app.use(expressLayouts);
 app.set('layout', './layouts/index');
 
 app.use(middleware);
