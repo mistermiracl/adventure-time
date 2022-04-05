@@ -44,9 +44,6 @@ const output = {
     jsPath: path.join(publicPath, jsFolder),
     cssPath: path.join(publicPath, cssFolder),
     imgPath: path.join(publicPath, imgFolder)
-    // get img() {
-    //     return fs.readdirSync(publicPath + imgPath).map(f => publicPath + imgPath + f)
-    // }
 }
 
 module.exports = {
@@ -100,17 +97,5 @@ module.exports = {
                 ]
             }
         })
-    ],
-    // watchOptions: {
-    //     aggregateTimeout: 300,
-    //     ignored: [
-    //         // '*.*',
-    //         // '**/node_modules',
-    //         // publicPath + '**',
-    //         // srcPath + '**/!index.src.ejs'
-    //         './public',
-    //         './src'
-    //     ]
-    // }
-    //--stats-children // show stats for child compilations
+    ]
 };
