@@ -1,7 +1,11 @@
 .vscode
 node_modules
 
+.sessions
+*.bsqlite3
+
 public/**/*
 src/views/layouts/index.ejs
 *.sh
 *.env
+originals
