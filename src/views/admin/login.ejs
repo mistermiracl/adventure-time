@@ -1,0 +1,17 @@
+<div class="pt-1">
+    <div class="max-w-2xl m-auto">
+        <form method="post">
+            <div class="mb-6">
+                <label for="pass" class="block mb-2 text-lg font-medium <%= error ? 'text-red-600' : '' %>">Password</label>
+                <input type="password" id="pass" name="pass"
+                    class="block w-full p-2.5 text-lg bg-darkPurple-800
+                        focus:outline-none
+                        <%= error ? 'text-red-600' : '' %>" autofocus required>
+            </div>
+            <button type="submit" class="mt-4 w-full py-2.5 font-bold text-lg text-black bg-yellow-500 rounded-sm
+                hover:text-yellow-500 hover:bg-black transition-colors">
+                Login <%- svg('hero-o-login', 'inline-block w-6') %> 
+            </button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<div class="max-w-2xl m-auto mt-1">
+    <div class="flex">
+        <h1 class="text-4xl font-bold text-yellow-500">Seasons</h1>
+        <a href="/admin/season/" class="ml-auto px-5 py-2.5 font-bold text-lg text-black bg-yellow-500 rounded-sm
+            hover:text-yellow-500 hover:bg-black transition-colors">
+            New <%- svg('hero-s-plus-circle', 'inline-block w-6') %>
+        </a>
+    </div>
+    <div class="mt-4">
+        <table class="w-full text-center">
+            <thead>
+                <tr class="bg-darkPurple-800">
+                    <th class="py-2">Number</th>
+                    <th class="py-2">Name</th>
+                    <th class="py-2">Slug</th>
+                    <th class="py-2">Description</th>
+                    <th class="py-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (var season of seasons) { %>
+                <tr class="even:bg-darkPurple-800">
+                    <td class="py-1"><%= season.number %></td>
+                    <td class="py-1"><%= season.name ? season.name : '-' %></td>
+                    <td class="py-1"><%= season.slug %></td>
+                    <td class="py-1"><%= season.description ? season.description : '-' %></td>
+                    <td class="py-1">
+                        <a href="/admin/season/<%= season.id %>/" class="ml-auto font-bold text-lg text-yellow-500 transition-colors
+                            hover:text-yellow-600">
+                            <%- svg('hero-s-pencil-alt', 'inline-block w-6') %>
+                        </a>
+                        <a href="/admin/season/<%= season.id %>/delete/" class="ml-auto font-bold text-lg text-yellow-500 transition-colors
+                            hover:text-yellow-600">
+                            <%- svg('hero-s-trash', 'inline-block w-6') %>
+                        </a>
+                    </td>
+                </tr>
+                <% } %>
+                <% if (!seasons.length) { %> 
+                <tr>
+                    <td colspan="4" class="py-2">No seasons</td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
