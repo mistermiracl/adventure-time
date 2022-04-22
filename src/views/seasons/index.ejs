@@ -1,0 +1,35 @@
+<div class="text-center">
+    <nav>
+        <ul class="list-none">
+            <%# this awful hack to remove inline elements gap, should've used flexbox %>
+            <!--
+            <% for(const season of seasons) { %>
+            --><li class="inline-block h-12">
+                <a class="inline-block px-5 py-3 bg-black border-b-0 border-b-yellow-500 transition-[border-width] duration-75
+                    hover:border-b-4
+                    <%= currentUrl.endsWith(`season-${season}/`) ? 'font-bold' : '' %>"
+                    href="/seasons/season-<%= season %>">Season <%= season %></a>
+            </li><!--
+            <% } %>
+            -->
+        </ul>
+    </nav>
+</div>
+<div class="text-center">
+    <div class="flex flex-wrap justify-center gap-2 mx-auto mt-6 max-w-4xl">
+        <%# episodes %>
+        <% for(let i = 0; i < episodes.length; i++) { const episode = episodes[i]; %>
+        <%# <div class="flex-initial flex flex-col basis-[calc(50%-1.5rem)] gap-4 p-6 rounded-xl bg-darkPurple-800"> %>
+        <div class="flex-initial flex flex-col gap-4 w-72 p-3 rounded-xl bg-darkPurple-800">
+            <img src="<%= episode.poster %>" alt="">
+            <h1 class="text-xl font-bold"><%= (i + 1) + '. ' + episode.name %></h1>
+            <div class="my-auto"><%= episode.description %></div>
+            <a class="mt-4 w-full px-2 py-1 font-bold text-lg text-black bg-yellow-500 rounded-sm
+                hover:text-yellow-500 hover:bg-black transition-colors"
+                href="episode-<%= `${i + 1}-${episode.slug}` %> ">
+                Watch Now <%- svg('hero-s-play', 'inline-block w-8' ) %>
+            </a>
+        </div>
+        <% } %>
+    </div>
+</div>
