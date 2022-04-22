@@ -3,10 +3,12 @@ module.exports = {
         // '!./src/views/index.ejs',
         // './src/views/**/*.ejs'
         // have to do each views directory since glob expressions dont work so well with webpack iic
+        // TODO: fix above
         './src/views/layouts/index.src.ejs',
         './src/views/partials/**/*.ejs',
+        './src/views/admin/**/*.ejs',
         './src/views/index/**/*.ejs',
-        './src/views/season/**/*.ejs',
+        './src/views/seasons/**/*.ejs',
     ],
     theme: {
         extend: {
