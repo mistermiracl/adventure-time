@@ -12,27 +12,29 @@ const fs = require('fs');
  * @param {string} name heroicon name, prefixed with "hero-"
  */
 function svg(name, className) {
-    // TODO: optimized, all these conditions can be simplified by checking the split for each, reducing it to just one lookup
-    if (name.startsWith('hero-') && (name.includes('-s-') || name.includes('-o-'))) {
+    const nameParts = name.split('-');
+    if(nameParts.length >= 3) {
+        // TODO: does fs.readFileSync block the event loop? / in a significant way?, i know it's not the nodejs way
         // NOTE: make the readfile async?
         // NOTE: add all the svg in the public directory?
-        const nameParts = name.split('-');
         const heroiconType = nameParts[1];
-        const heroiconName = nameParts[2] + '.svg';
-        
-        var heroiconsTypeFolder = '';
-        if(heroiconType == 's') {
-            heroiconsTypeFolder = 'solid';
-        } else if(heroiconType == 'o') {
-            heroiconsTypeFolder = 'outline';
-        }
+        const heroiconName = nameParts.slice(2).join('-') + '.svg';
 
-        try {
-            const svg = fs.readFileSync(path.join(projectRoot, 'node_modules', 'heroicons', heroiconsTypeFolder, heroiconName)).toString();
-            const svgParts = svg.split('<svg ');
-            return `<svg ${className ? `class="${className}"` : ''} ${svgParts[1]}`;
-        } catch(e) {
-            throw e;
+        if (nameParts[0] == 'hero' && (heroiconType === 's' || heroiconType === 'o')) {   
+            var heroiconsTypeFolder = '';
+            if(heroiconType == 's') {
+                heroiconsTypeFolder = 'solid';
+            } else if(heroiconType == 'o') {
+                heroiconsTypeFolder = 'outline';
+            }
+
+            try {
+                const svg = fs.readFileSync(path.join(projectRoot, 'node_modules', 'heroicons', heroiconsTypeFolder, heroiconName)).toString();
+                const svgParts = svg.split('<svg ');
+                return `<svg ${className ? `class="${className}"` : ''} ${svgParts[1]}`;
+            } catch(e) {
+                throw e;
+            }
         }
     }
     return '';

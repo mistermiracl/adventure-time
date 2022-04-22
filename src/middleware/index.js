@@ -1,3 +1,4 @@
 module.exports = [
-    require('./global')
+    require('./global'),
+    require('./formatUrl')
 ];
