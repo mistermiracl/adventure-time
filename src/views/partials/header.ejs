@@ -1,4 +1,4 @@
-<header class="pb-6 text-center">
+<header class="relative pb-6 text-center">
     <!-- Adventure Time - Watch every episode! -->
     <img class="inline w-96" src="/img/logo.png" alt="">
     <nav id="mainNav">
@@ -9,8 +9,16 @@
             <li class="inline-block h-12">
                 <a class="inline-block px-5 py-3 bg-black border-b-0 border-b-yellow-500 hover:border-b-4 transition-[border-width] duration-75 <%= currentUrl === '/' ? 'font-bold' : '' %>" href="/">Home</a>
             </li><li class="inline-block h-12">
-                <a class="inline-block px-5 py-3 bg-black border-b-0 border-b-yellow-500 hover:border-b-4 transition-[border-width] duration-75 <%= currentUrl === '/season' ? 'font-bold' : '' %>" href="/season">Seasons</a>
+                <a class="inline-block px-5 py-3 bg-black border-b-0 border-b-yellow-500 hover:border-b-4 transition-[border-width] duration-75 <%= currentUrl.startsWith('/seasons') ? 'font-bold' : '' %>" href="/seasons/">Seasons</a>
             </li>
         </ul>
     </nav>
+    <img class="absolute -z-[1] bottom-0 h-32
+        sm:top-[50%] sm:left-[10%] sm:w-auto sm:h-60 sm:translate-y-[-50%]
+        xl:fixed xl:top-[50%] xl:left-0 xl:w-60 xl:h-auto xl:translate-y-[-50%]"
+        src="/img/finn.png" alt="">
+    <img class="absolute -z-[1] bottom-0 right-0 h-32
+        sm:top-[50%] sm:right-[10%] sm:w-auto sm:h-60 sm:translate-y-[-50%]
+        xl:fixed xl:top-[50%] xl:right-0 xl:w-60 xl:h-auto xl:translate-y-[-50%]"
+        src="/img/jake.png" alt="">
 </header>
