@@ -7,6 +7,36 @@
 const path = require('path');
 const fs = require('fs');
 
+const config = require('../config');
+
+/**
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {function} next 
+ */
+function trace(req, res, next) {
+    console.log(req.method + ' ' + req.url);
+    res.on('finish', () => {
+        console.log(res.statusMessage + ' ' + res.statusCode);
+    });
+    next();
+}
+
+/**
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {function} next 
+ */
+function formatUrl(req, res, next) {
+    const [ url, query ] = req.url.split('?');
+    if(!url.endsWith('/')) {
+        return res.redirect(`${url}/${query ? query : ''}`);
+    }
+    next();
+};
+
 /**
  * Returns a heroicons svg
  * @param {string} name heroicon name, prefixed with "hero-"
@@ -29,7 +59,7 @@ function svg(name, className) {
             }
 
             try {
-                const svg = fs.readFileSync(path.join(projectRoot, 'node_modules', 'heroicons', heroiconsTypeFolder, heroiconName)).toString();
+                const svg = fs.readFileSync(path.join(config.projectRoot, 'node_modules', 'heroicons', heroiconsTypeFolder, heroiconName)).toString();
                 const svgParts = svg.split('<svg ');
                 return `<svg ${className ? `class="${className}"` : ''} ${svgParts[1]}`;
             } catch(e) {
@@ -46,8 +76,10 @@ function svg(name, className) {
  * @param {Response} res 
  * @param {function} next 
  */
-module.exports = (req, res, next) => {
+function viewHelpers(req, res, next) {
     res.locals.currentUrl = req.url;
     res.locals.svg = svg
     next();
-};
+}
+
+module.exports = [trace, formatUrl, viewHelpers];
