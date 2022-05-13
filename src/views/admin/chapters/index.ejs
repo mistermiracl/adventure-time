@@ -1,0 +1,75 @@
+<div class="max-w-4xl m-auto mt-1">
+    <%- include('../../partials/backLink', { link: '/admin/' }) %>
+    <h1 class="text-4xl font-bold text-yellow-500">Chapters</h1>
+    <div class="flex mt-7">
+        <select id="season" class="pl-4 pr-16 bg-darkPurple-800 border border-darkPurple-800 outline-none">
+            <% for(const season of seasons) { %>
+            <option value="<%= season.id %>" <%= selectedSeasonId === season.id ? 'selected' : '' %>>
+                <%= season.number ? 'Season ' + season.number : season.name %>
+            </option>
+            <% } %>
+        </select>
+        <a href="/admin/chapter/?seasonId=<%= selectedSeasonId %>" class="ml-auto px-5 py-2.5 font-bold text-lg text-black bg-yellow-500 rounded-sm
+            hover:text-yellow-500 hover:bg-black transition-colors">
+            New <%- svg('hero-s-plus-circle', 'inline-block w-6') %>
+        </a>
+    </div>
+    <div class="mt-4 w-full overflow-x-auto">
+        <table class="w-full min-w-[620px] text-center">
+            <thead>
+                <tr class="bg-darkPurple-800">
+                    <th class="py-2">Number</th>
+                    <th class="py-2">Name</th>
+                    <th class="py-2">Slug</th>
+                    <th class="py-2">Description</th>
+                    <th class="py-2">Poster</th>
+                    <th class="py-2">Source</th>
+                    <th class="py-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (const chapter of chapters) { %>
+                <tr class="even:bg-darkPurple-800">
+                    <td class="py-1"><%= chapter.number %></td>
+                    <td class="py-1"><%= chapter.name %></td>
+                    <td class="py-1"><%= chapter.slug %></td>
+                    <td class="py-1"><%= chapter.description %></td>
+                    <td class="w-36 py-1">
+                        <img src="<%= chapter.posterUrl %>" alt="">
+                    </td>
+                    <td class="py-1">
+                        <a href="<%= chapter.sourceUrl %> " target="_blank" class="text-yellow-500 transition-colors
+                            hover:text-yellow-600">
+                            <%- svg('hero-s-external-link', 'inline-block w-8') %>
+                        </a>
+                    </td>
+                    <td class="py-1">
+                        <a href="/admin/chapter/<%= chapter.id %>/?seasonId=<%= selectedSeasonId %>" class="text-yellow-500 transition-colors
+                            hover:text-yellow-600">
+                            <%- svg('hero-s-pencil-alt', 'inline-block w-6') %>
+                        </a>
+                        <a href="/admin/chapter/<%= chapter.id %>/delete/?seasonId=<%= selectedSeasonId %>" class="text-yellow-500 transition-colors
+                            hover:text-yellow-600
+                            confirm-link">
+                            <%- svg('hero-s-trash', 'inline-block w-6') %>
+                        </a>
+                    </td>
+                </tr>
+                <% } %>
+                <% if (!chapters.length) { %> 
+                <tr>
+                    <td colspan="7" class="py-2">No chapters</td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    window.addEventListener('load', () => {
+        const seasonSelect = document.getElementById('season');
+        seasonSelect.onchange = () => {
+            window.location.href = '/admin/chapters/?seasonId=' + seasonSelect.value;
+        };
+    });
+</script>

@@ -1,0 +1,156 @@
+<div class="m-auto max-w-2xl pt-1">
+    <%- include('../../partials/backLink', { link: '/admin/chapters/?seasonId=' + seasonId }) %>
+    <form id="chapterForm" method="post" enctype="multipart/form-data">
+        <input id="sourceKey" name="source" type="hidden" value="<%= chapter.source %>">
+        <div class="flex gap-2">
+            <div class="flex-1">
+                <label for="number" class="block mb-2 text-lg font-medium <%= errors.number ? 'text-red-600' : '' %>">Number</label>
+                <input type="number" min="0" id="number" name="number" value="<%= chapter.number %>"
+                    class="block w-full p-2.5 text-lg bg-darkPurple-800
+                        focus:outline-none
+                    <%= errors.number ? 'text-red-600' : '' %>" autofocus required>
+            </div>
+            <div class="flex-1">
+                <label for="name" class="block mb-2 text-lg font-medium <%= errors.name ? 'text-red-600' : '' %>">Name</label>
+                <input type="text" id="name" name="name" value="<%= chapter.name %>"
+                    class="block w-full p-2.5 text-lg bg-darkPurple-800
+                        focus:outline-none
+                    <%= errors.name ? 'text-red-600' : '' %>" required>
+            </div>
+        </div>
+        <div class="mt-2">
+            <label for="slug" class="block mb-2 text-lg font-medium <%= errors.slug ? 'text-red-600' : '' %>">Slug</label>
+            <input type="text" id="slug" name="slug" value="<%= chapter.slug %>"
+                class="block w-full p-2.5 text-lg bg-darkPurple-800
+                    focus:outline-none
+                <%= errors.slug ? 'text-red-600' : '' %>">
+        </div>
+        <div class="mt-2">
+            <label for="desc" class="block mb-2 text-lg font-medium <%= errors.desc ? 'text-red-600' : '' %>">Description</label>
+            <textarea id="desc" name="description" class="block w-full p-2.5 text-lg bg-darkPurple-800
+                focus:outline-none
+                <%= errors.desc ? 'text-red-600' : '' %>" required><%= chapter.description %></textarea>
+        </div>
+        <div class="flex gap-4 mt-4">
+            <input id="poster" name="poster" type="file" accept="image/*" class="hidden peer" <%= chapter.poster ? '' : 'required'%>>
+            <label for="poster" id="posterLabel" class="flex-1 self-center py-2.5 font-bold text-lg text-center text-black bg-yellow-500 rounded-sm <%= errors.poster ? 'text-red-600' : '' %>
+                hover:text-yellow-500 hover:bg-black transition-colors">Poster <%- svg('hero-o-upload', 'inline-block w-6') %> </label>
+            <img id="posterPreview" class="flex-1 h-48 object-contain <%= chapter.poster ? '' : 'hidden' %>" src="<%= chapter.posterUrl %>" alt="">
+            <div id="posterPreviewPlaceholder" class="flex-1 flex items-center justify-center h-48 border-2 border-dashed border-gray-400 text-gray-700 <%= chapter.poster ? 'hidden' : '' %>">
+                <%- svg('hero-s-photograph', 'inline-block w-14') %>
+            </div>
+        </div>
+        <div class="flex gap-4 mt-4">
+            <input id="source" type="file" accept="video/mp4" class="hidden peer" <%= chapter.source ? '' : 'required'%>>
+            <label for="source" id="sourceLabel" class="flex-1 self-center py-2.5 font-bold text-lg text-center text-black bg-yellow-500 rounded-sm <%= errors.source ? 'text-red-600' : '' %>
+                hover:text-yellow-500 hover:bg-black transition-colors">Source <%- svg('hero-o-upload', 'inline-block w-6') %> </label>
+            <div class="flex-1 <%= chapter.source ? '' : 'hidden' %>">
+                <video id="sourcePreview" class="w-full" src="<%= chapter.sourceUrl %>" controls></video>
+            </div>
+            <div id="sourcePreviewPlaceholder" class="flex-1 flex items-center justify-center h-48 border-2 border-dashed border-gray-400 text-gray-700 <%= chapter.source ? 'hidden' : '' %>">
+                <%- svg('hero-s-video-camera', 'inline-block w-14') %>
+            </div>
+        </div>
+        <button id="beginSubmission" type="button" class="mt-4 w-full py-2.5 font-bold text-lg text-black bg-yellow-500 rounded-sm
+            hover:text-yellow-500 hover:bg-black transition-colors
+            disabled:text-black/70 disabled:bg-yellow-300">
+            Save <%- svg('hero-o-save', 'inline-block w-6') %>
+        </button>
+    </form>
+</div>
+<script>
+    window.onload = () => {
+        const seasonId = '<%= seasonId %>';
+
+        const getSourceUploadSignedUrl = '/admin/chapter/upload-url/';
+        // const chapterSourceUrl = `/admin/chapter/${chapter.id}/source/?seasonId=${seasonId}`;
+
+        const uploadPosterInput = document.getElementById('poster');
+        const uploadPosterLabel = document.getElementById('posterLabel');
+        const posterPreview = document.getElementById('posterPreview');
+        const posterPreviewPlaceholder = document.getElementById('posterPreviewPlaceholder');
+        uploadPosterInput.oninvalid = () => {
+            if (!uploadPosterInput.files.length) {
+                uploadPosterLabel.classList.add('text-red-600');
+                //<%# have to do this 'cause text-red doesnt override the text-gray despite being declared later in the class attriute, i believe this is because text gray is declared later in the css file %>
+                posterPreviewPlaceholder.classList.remove('text-gray-700');
+                posterPreviewPlaceholder.classList.add('border-red-600', 'text-red-600');
+            }
+        };
+        uploadPosterInput.addEventListener('change', () => {
+            if (uploadPosterInput.files.length) {
+                const file = uploadPosterInput.files[0];
+                posterPreview.src = URL.createObjectURL(file);
+                posterPreview.classList.remove('hidden');
+                posterPreviewPlaceholder.classList.add('hidden');
+            } else {
+                posterPreview.src = null;
+                posterPreview.classList.add('hidden');
+                posterPreviewPlaceholder.classList.remove('hidden');
+            }
+        });
+
+        const uploadSourceInput = document.getElementById('source');
+        const uploadSourceLabel = document.getElementById('sourceLabel');
+        const sourcePreview = document.getElementById('sourcePreview');
+        const sourcePreviewPlaceholder = document.getElementById('sourcePreviewPlaceholder');
+        uploadSourceInput.oninvalid = () => {
+            if (!uploadSourceInput.files.length) {
+                uploadSourceLabel.classList.add('text-red-600');
+                sourcePreviewPlaceholder.classList.remove('text-gray-700');
+                sourcePreviewPlaceholder.classList.add('border-red-600', 'text-red-600');
+            }
+        };
+        uploadSourceInput.addEventListener('change', () => {
+            if (uploadSourceInput.files.length) {
+                const file = uploadSourceInput.files[0];
+                sourcePreview.src = URL.createObjectURL(file);
+                sourcePreview.parentElement.classList.remove('hidden');
+                sourcePreviewPlaceholder.classList.add('hidden');
+            } else {
+                sourcePreview.src = null;
+                sourcePreview.parentElement.classList.add('hidden');
+                sourcePreviewPlaceholder.classList.remove('hidden');
+            }
+        });
+
+        // TODO: either hide eveyrthing source related or delete the previous source from cloud storage when requesting the signed url
+        const chapterForm = document.getElementById('chapterForm');
+        const sourceKeyInput = document.getElementById('sourceKey');
+        const beginSubmissionButton = document.getElementById('beginSubmission');
+        beginSubmissionButton.onclick = async () => {
+            if (chapterForm.reportValidity()) {
+                beginSubmissionButton.disabled = true;
+                // next sibling is the label
+                uploadPosterInput.nextElementSibling.classList.add('disabled');
+                uploadSourceInput.nextElementSibling.classList.add('disabled');
+                if (uploadSourceInput.files.length) {
+                    /**
+                     * @type {File}
+                     */
+                    const source = uploadSourceInput.files[0];
+                    const uploadsignedUrlRes = await (await fetch(getSourceUploadSignedUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            seasonId,
+                            filename: source.name,
+                            mimeType: source.type
+                        })
+                    })).json();
+                    sourceKeyInput.value = uploadsignedUrlRes.key;
+                    await fetch(uploadsignedUrlRes.signedUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': source.type
+                        },
+                        body: source
+                    });
+                }
+                chapterForm.submit();
+            }
+        };
+    };
+</script>

@@ -1,40 +1,54 @@
-<div class="pt-1">
-    <div class="max-w-2xl m-auto">
-        <form method="post">
-            <div class="flex gap-2">
-                <div class="flex-1">
-                    <label for="number" class="block mb-2 text-lg font-medium <%= error.number ? 'text-red-600' : '' %>">Number</label>
-                    <input type="number" min="0" id="number" name="number" value="<%= season.number %>"
-                        class="block w-full p-2.5 text-lg bg-darkPurple-800
-                            focus:outline-none
-                        <%= error.number ? 'text-red-600' : '' %>" autofocus required>
-                </div>
-                <div class="flex-1">
-                    <label for="name" class="block mb-2 text-lg font-medium <%= error.name ? 'text-red-600' : '' %>">Name</label>
-                    <input type="text" id="name" name="name" value="<%= season.name %>"
-                        class="block w-full p-2.5 text-lg bg-darkPurple-800
-                            focus:outline-none
-                        <%= error.name ? 'text-red-600' : '' %>">
-                </div>
+<div class="m-auto max-w-2xl pt-1">
+    <%- include('../../partials/backLink', { link: '/admin/seasons/' }) %>
+    <form method="post">
+        <div class="flex gap-2">
+            <div class="flex flex-col items-center">
+                <label for="special" class="text-lg font-medium">Special</label>
+                <input id="special" class="appearance-none relative my-auto w-7 h-7 rounded-sm bg-darkPurple-800
+                    before:hidden before:absolute before:w-4 before:h-4 before:top-1/2 before:left-1/2 before:-translate-y-1/2 before:-translate-x-1/2 before:bg-yellow-500
+                    checked:before:block" name="special" type="checkbox" <%= season.special ? 'checked' : '' %>>
             </div>
-            <div class="mt-2">
-                <label for="slug" class="block mb-2 text-lg font-medium <%= error.slug ? 'text-red-600' : '' %>">Slug</label>
-                <input type="text" id="slug" name="slug" value="<%= season.slug %>"
+            <div class="flex-1">
+                <label for="number" class="block mb-2 text-lg font-medium <%= error.number ? 'text-red-600' : '' %>">Number</label>
+                <input type="number" min="0" id="number" name="number" value="<%= season.number %>"
                     class="block w-full p-2.5 text-lg bg-darkPurple-800
                         focus:outline-none
-                    <%= error.slug ? 'text-red-600' : '' %>">
+                    <%= error.number ? 'text-red-600' : '' %>" autofocus <%= season.special ? '' : 'required' %>>
             </div>
-            <div class="mt-2">
-                <label for="desc" class="block mb-2 text-lg font-medium <%= error.desc ? 'text-red-600' : '' %>">Description</label>
-                <textarea id="desc" name="description" value="<%= season.description %>"
+            <div class="flex-1">
+                <label for="name" class="block mb-2 text-lg font-medium <%= error.name ? 'text-red-600' : '' %>">Name</label>
+                <input type="text" id="name" name="name" value="<%= season.name %>"
                     class="block w-full p-2.5 text-lg bg-darkPurple-800
                         focus:outline-none
-                    <%= error.desc ? 'text-red-600' : '' %>"></textarea>
+                    <%= error.name ? 'text-red-600' : '' %>">
             </div>
-            <button type="submit" class="mt-8 w-full py-2.5 font-bold text-lg text-black bg-yellow-500 rounded-sm
-                hover:text-yellow-500 hover:bg-black transition-colors">
-                Save <%- svg('hero-o-save', 'inline-block w-6') %> 
-            </button>
-        </form>
-    </div>
+        </div>
+        <div class="mt-2">
+            <label for="slug" class="block mb-2 text-lg font-medium <%= error.slug ? 'text-red-600' : '' %>">Slug</label>
+            <input type="text" id="slug" name="slug" value="<%= season.slug %>"
+                class="block w-full p-2.5 text-lg bg-darkPurple-800
+                    focus:outline-none
+                <%= error.slug ? 'text-red-600' : '' %>">
+        </div>
+        <div class="mt-2">
+            <label for="desc" class="block mb-2 text-lg font-medium <%= error.desc ? 'text-red-600' : '' %>">Description</label>
+            <textarea id="desc" name="description" value="<%= season.description %>"
+                class="block w-full p-2.5 text-lg bg-darkPurple-800
+                    focus:outline-none
+                <%= error.desc ? 'text-red-600' : '' %>"></textarea>
+        </div>
+        <button type="submit" class="mt-8 w-full py-2.5 font-bold text-lg text-black bg-yellow-500 rounded-sm
+            hover:text-yellow-500 hover:bg-black transition-colors">
+            Save <%- svg('hero-o-save', 'inline-block w-6') %> 
+        </button>
+    </form>
 </div>
+<script>
+    window.addEventListener('load', () => {
+        const numberInput = document.getElementById('number');
+        const specialCheckbox = document.getElementById('special');
+        specialCheckbox.onchange = () => {
+            numberInput.required = !specialCheckbox.checked;
+        };
+    });
+</script>
