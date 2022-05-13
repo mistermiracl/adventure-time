@@ -12,8 +12,9 @@
     transition: border-width 75ms linear 0ms;
 }*/
 
-.full-rotate {
-    transform: translateY(-10%) rotate3d(0, 1, 0, 180deg);
+.disabled {
+    /* peer-read-only:text-black/70 peer-read-only:bg-yellow-300 peer-read-only:pointer-events-none */
+    @apply text-black/70 bg-yellow-300 pointer-events-none;
 }
 
 input[type=number]::-webkit-inner-spin-button,
