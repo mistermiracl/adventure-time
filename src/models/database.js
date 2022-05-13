@@ -1,9 +1,11 @@
-/**
- * @type {knex.knex}
- */
-const knex = require('knex');
+const { Datastore } = require('@google-cloud/datastore');
 
-// TODO: move it to src/index.js
-const config = require('../../database/config');
+const config = require('../config');
 
-module.exports = knex(config);
+const databaseConfig = {};
+if(config.isDev) {
+    databaseConfig.keyFile = config.gcpKeysFile;
+}
+const database = new Datastore(databaseConfig);
+
+module.exports = database;

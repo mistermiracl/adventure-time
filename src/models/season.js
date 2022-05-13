@@ -1,41 +1,108 @@
 /**
- * @module AdminController
- * @typedef {import('express').Request} Request
- * @typedef {import('express').Response} Response
+ * @module SeasonModel
  */
 
 const database = require('./database');
 
-const tableName = 'season';
+const kind = 'season';
+
+function createKey(id) {
+    if(id) {
+        return database.key([kind, parseInt(id)]);//have to parse it to int, for it return 'id' instead of 'name'
+    }
+    return database.key(kind);
+}
+
+function createEntity(data, id) {
+    return {
+        key: createKey(id),
+        data
+    }
+}
 
 function all() {
-    return database.select().from(tableName).orderBy('number');
+    return database.createQuery(kind).order('number').run()
+        .then(res => res[0])
+        .then(entities => entities.map(e => {
+            e.id = e[database.KEY].id;
+            return e;
+        }));
+}
+
+function allWhere(conditions) {
+    const q = database.createQuery(kind);
+    for(const k in conditions) {
+        q.filter(k, conditions[k]);
+    }
+    return q
+        .order('number')
+        .run()
+        .then(res => res[0])
+        .then(entities => entities.map(e => {
+            e.id = e[database.KEY].id;
+            return e;
+        }));
 }
 
 function find(id) {
-    return database.select().from(tableName).where('id', id).first();
+    return database.get(createKey(id))
+        .then(res => res.length ? res[0] : null)
+        .then(entity => {
+            entity.id = entity[database.KEY].id;
+            return entity;
+        });
+}
+
+function findByNumber(number) {
+    return database.createQuery(kind)
+        .filter('number', number)
+        .run()
+        .then(res => res.length ? res[0] : null)
+        .then(entities => entities?.length ? entities[0] : null)
+        .then(entity => {
+            entity.id = entity[database.KEY].id;
+            return entity;
+        });
 }
 
 function insert(season) {
     if(!season.slug) {
-        season.slug = 'season-' + season.number;
+        if(season.special) {
+            season.slug = season.name.toLowerCase().replace(/\s/g, '-');
+        } else {
+            season.slug = 'season-' + season.number;
+        }
     }
-    return database.insert(season).into(tableName);
+    if(season.number) {
+        season.number = parseInt(season.number);
+    } else {
+        // NOTE: using an empty string put numberless seasons in the bottom of the ascending order
+        season.number = '';
+    }
+    return database.insert(createEntity(season));
 }
 
 function update(id, season) {
     delete season.id; // cant update the id
-    return database(tableName).update(season).where('id', id);// .table(tableName)
+    if(season.number) {
+        season.number = parseInt(season.number);
+    } else {
+        season.number = '';
+    }
+    return database.update(createEntity(season, id));
 }
 
 function remove(id) {
-    return database(tableName).del().where('id', id);
+    return database.delete(createKey(id));
 }
 
 module.exports = {
+    createKey,
     all,
     find,
     insert,
     update,
-    remove
+    remove,
+    allWhere,
+    findByNumber
 }
