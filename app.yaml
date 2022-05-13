@@ -1,0 +1,5 @@
+runtime: nodejs14
+env_variables:
+  LOCAL: false
+  GCP_BUCKET: s-sources
+  APP_SECRET: $*%[*L!P"?"EFAS9_i&%#ASD__!"#FS00i12asdnbk$%!20$
