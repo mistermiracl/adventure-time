@@ -16,9 +16,8 @@ const config = require('../config');
  * @param {function} next 
  */
 function trace(req, res, next) {
-    console.log(req.method + ' ' + req.url);
     res.on('finish', () => {
-        console.log(res.statusMessage + ' ' + res.statusCode);
+        console.log(`${req.method} ${req.url} [${res.statusMessage} ${res.statusCode}]`);
     });
     next();
 }
