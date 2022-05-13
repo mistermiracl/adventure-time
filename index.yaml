@@ -1,0 +1,10 @@
+indexes:
+  - kind: chapter
+    ancestor: yes
+    properties:
+    - name: number
+  - kind: chapter
+    ancestor: yes
+    properties:
+    - name: number
+      direction: desc
