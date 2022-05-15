@@ -18,7 +18,7 @@
         <table class="w-full min-w-[620px] text-center">
             <thead>
                 <tr class="bg-darkPurple-800">
-                    <th class="py-2">Number</th>
+                    <th class="py-2">#</th>
                     <th class="py-2">Name</th>
                     <th class="py-2">Slug</th>
                     <th class="py-2">Description</th>
@@ -30,11 +30,11 @@
             <tbody>
                 <% for (const chapter of chapters) { %>
                 <tr class="even:bg-darkPurple-800">
-                    <td class="py-1"><%= chapter.number %></td>
+                    <td class="p-2"><%= chapter.number %></td>
                     <td class="py-1"><%= chapter.name %></td>
                     <td class="py-1"><%= chapter.slug %></td>
-                    <td class="py-1"><%= chapter.description %></td>
-                    <td class="w-36 py-1">
+                    <td class="w-60 px-3 py-1"><%= chapter.description %></td>
+                    <td class="w-56 py-1">
                         <img src="<%= chapter.posterUrl %>" alt="">
                     </td>
                     <td class="py-1">

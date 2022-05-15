@@ -165,11 +165,10 @@ async function chapter(req, res) {
     const id = req.params.id;
     const seasonId = req.query.seasonId;
     
-    var chapter;
     res.locals.errors = {};
     switch(req.method) {
         case 'GET':
-            chapter = {};
+            let chapter = {};
             if(id) {
                 chapter = await chapterModel.find(id, seasonId);
                 chapter.posterUrl = cloudStorage.publicUrl(chapter.poster);
@@ -186,7 +185,7 @@ async function chapter(req, res) {
                 console.log('Retrieving chapter');
                 let chapter = await chapterModel.find(id, seasonId);
                 if(poster) {
-                    console.log('There is a poster: ' + poster);
+                    console.log('There is a new poster: ' + poster);
                     const prevPosterName = chapter.poster;
                     if(prevPosterName) {
                         console.log('Removing previous poster');
@@ -194,11 +193,6 @@ async function chapter(req, res) {
                     }
                     const posterName = await cloudStorage.upload(objectPrefix, poster);
                     chapter.poster = posterName;
-                }
-                if(req.body.source !== chapter.source) {
-                    console.log('There is a new source: ' + chapter.source);
-                    console.log('Removing previous source');
-                    await cloudStorage.remove(chapter.source);
                 }
                 chapter = { ...chapter, ...req.body };
                 console.log('Updating chapter');
@@ -208,9 +202,7 @@ async function chapter(req, res) {
                 const posterName = await cloudStorage.upload(objectPrefix, poster);
                 chapter.poster = posterName;
                 await chapterModel.insert(chapter, seasonId);
-                // console.log(res[0].mutationResults[0].key);
             }
-
             res.redirect('/admin/chapters/?seasonId=' + seasonId);
             break;
         default:
@@ -246,7 +238,7 @@ async function deleteChapter(req, res) {
     const seasonId = req.query.seasonId;
     const chapter = await chapterModel.find(id, seasonId);
     await cloudStorage.remove(chapter.poster);
-    await cloudStorage.remove(chapter.source);
+    // await cloudStorage.remove(chapter.source);
     await chapterModel.remove(id, seasonId);
     res.redirect('/admin/chapters/?seasonId=' + seasonId);
 }

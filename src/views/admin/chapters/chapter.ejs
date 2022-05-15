@@ -1,7 +1,6 @@
 <div class="m-auto max-w-2xl pt-1">
     <%- include('../../partials/backLink', { link: '/admin/chapters/?seasonId=' + seasonId }) %>
     <form id="chapterForm" method="post" enctype="multipart/form-data">
-        <input id="sourceKey" name="source" type="hidden" value="<%= chapter.source %>">
         <div class="flex gap-2">
             <div class="flex-1">
                 <label for="number" class="block mb-2 text-lg font-medium <%= errors.number ? 'text-red-600' : '' %>">Number</label>
@@ -41,17 +40,13 @@
             </div>
         </div>
         <div class="flex gap-4 mt-4">
-            <input id="source" type="file" accept="video/mp4" class="hidden peer" <%= chapter.source ? '' : 'required'%>>
-            <label for="source" id="sourceLabel" class="flex-1 self-center py-2.5 font-bold text-lg text-center text-black bg-yellow-500 rounded-sm <%= errors.source ? 'text-red-600' : '' %>
-                hover:text-yellow-500 hover:bg-black transition-colors">Source <%- svg('hero-o-upload', 'inline-block w-6') %> </label>
-            <div class="flex-1 <%= chapter.source ? '' : 'hidden' %>">
-                <video id="sourcePreview" class="w-full" src="<%= chapter.sourceUrl %>" controls></video>
-            </div>
-            <div id="sourcePreviewPlaceholder" class="flex-1 flex items-center justify-center h-48 border-2 border-dashed border-gray-400 text-gray-700 <%= chapter.source ? 'hidden' : '' %>">
-                <%- svg('hero-s-video-camera', 'inline-block w-14') %>
-            </div>
+            <input type="text" id="source" name="source" value="<%= chapter.source %>"
+                class="block w-full p-2.5 text-lg bg-darkPurple-800
+                    focus:outline-none
+                    <%= errors.slug ? 'text-red-600' : '' %>"
+                placeholder="Source object" required>
         </div>
-        <button id="beginSubmission" type="button" class="mt-4 w-full py-2.5 font-bold text-lg text-black bg-yellow-500 rounded-sm
+        <button id="beginSubmission" type="submit" class="mt-4 w-full py-2.5 font-bold text-lg text-black bg-yellow-500 rounded-sm
             hover:text-yellow-500 hover:bg-black transition-colors
             disabled:text-black/70 disabled:bg-yellow-300">
             Save <%- svg('hero-o-save', 'inline-block w-6') %>
@@ -60,8 +55,6 @@
 </div>
 <script>
     window.onload = () => {
-        const seasonId = '<%= seasonId %>';
-
         const getSourceUploadSignedUrl = '/admin/chapter/upload-url/';
         // const chapterSourceUrl = `/admin/chapter/${chapter.id}/source/?seasonId=${seasonId}`;
 
@@ -89,68 +82,5 @@
                 posterPreviewPlaceholder.classList.remove('hidden');
             }
         });
-
-        const uploadSourceInput = document.getElementById('source');
-        const uploadSourceLabel = document.getElementById('sourceLabel');
-        const sourcePreview = document.getElementById('sourcePreview');
-        const sourcePreviewPlaceholder = document.getElementById('sourcePreviewPlaceholder');
-        uploadSourceInput.oninvalid = () => {
-            if (!uploadSourceInput.files.length) {
-                uploadSourceLabel.classList.add('text-red-600');
-                sourcePreviewPlaceholder.classList.remove('text-gray-700');
-                sourcePreviewPlaceholder.classList.add('border-red-600', 'text-red-600');
-            }
-        };
-        uploadSourceInput.addEventListener('change', () => {
-            if (uploadSourceInput.files.length) {
-                const file = uploadSourceInput.files[0];
-                sourcePreview.src = URL.createObjectURL(file);
-                sourcePreview.parentElement.classList.remove('hidden');
-                sourcePreviewPlaceholder.classList.add('hidden');
-            } else {
-                sourcePreview.src = null;
-                sourcePreview.parentElement.classList.add('hidden');
-                sourcePreviewPlaceholder.classList.remove('hidden');
-            }
-        });
-
-        // TODO: either hide eveyrthing source related or delete the previous source from cloud storage when requesting the signed url
-        const chapterForm = document.getElementById('chapterForm');
-        const sourceKeyInput = document.getElementById('sourceKey');
-        const beginSubmissionButton = document.getElementById('beginSubmission');
-        beginSubmissionButton.onclick = async () => {
-            if (chapterForm.reportValidity()) {
-                beginSubmissionButton.disabled = true;
-                // next sibling is the label
-                uploadPosterInput.nextElementSibling.classList.add('disabled');
-                uploadSourceInput.nextElementSibling.classList.add('disabled');
-                if (uploadSourceInput.files.length) {
-                    /**
-                     * @type {File}
-                     */
-                    const source = uploadSourceInput.files[0];
-                    const uploadsignedUrlRes = await (await fetch(getSourceUploadSignedUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            seasonId,
-                            filename: source.name,
-                            mimeType: source.type
-                        })
-                    })).json();
-                    sourceKeyInput.value = uploadsignedUrlRes.key;
-                    await fetch(uploadsignedUrlRes.signedUrl, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': source.type
-                        },
-                        body: source
-                    });
-                }
-                chapterForm.submit();
-            }
-        };
     };
 </script>
