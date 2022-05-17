@@ -7,8 +7,8 @@
             --><li class="inline-block h-12">
                 <a class="inline-block px-5 py-3 bg-black border-b-0 border-b-yellow-500 transition-[border-width] duration-75
                     hover:border-b-4
-                    <%= currentUrl.endsWith(`season-${season}/`) ? 'font-bold' : '' %>"
-                    href="/seasons/season-<%= season %>">Season <%= season %></a>
+                    <%= currentUrl.endsWith(`${season.slug}/`) ? 'font-bold' : '' %>"
+                    href="/seasons/<%= season.slug %>"><%= season.name %></a>
             </li><!--
             <% } %>
             -->
@@ -26,7 +26,7 @@
             <div class="my-auto"><%= episode.description %></div>
             <a class="mt-4 w-full px-2 py-1 font-bold text-lg text-black bg-yellow-500 rounded-sm
                 hover:text-yellow-500 hover:bg-black transition-colors"
-                href="episode-<%= `${i + 1}-${episode.slug}` %> ">
+                href="<%= episode.slug %>">
                 Watch Now <%- svg('hero-s-play', 'inline-block w-8' ) %>
             </a>
         </div>
