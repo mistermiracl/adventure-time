@@ -48,6 +48,7 @@ if(config.isDev && config.isLocal) {
     });
 } else {
     // TODO: use gap memcache or lets just use the default one
+    // TODO: move dotenv and session-file-store deps to dev dependencies
     // sessionConfig.store = null;
 }
 app.use(session(sessionConfig));
