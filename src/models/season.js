@@ -29,6 +29,23 @@ function all() {
         }));
 }
 
+async function allActive() {
+    // dynamic import because of circular dependencies, i hate it, the question is hould models call and reference each other at all? ive been working like that for quite a while
+    const chapterModel = require('./chapter');
+
+    return database.createQuery(kind).order('number').run()
+        .then(res => res[0])
+        .then(async entities => await entities.reduce(async (acc, e) => {
+            acc = await acc;
+            e.id = e[database.KEY].id;
+            if(await chapterModel.anyBySeason(e.id)) {
+                acc.push(e);
+            }
+            return acc;
+        }, Promise.resolve([])));
+}
+
+
 function allWhere(conditions) {
     const q = database.createQuery(kind);
     for(const k in conditions) {
@@ -99,6 +116,7 @@ function remove(id) {
 module.exports = {
     createKey,
     all,
+    allActive,
     find,
     insert,
     update,

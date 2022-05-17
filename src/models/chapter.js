@@ -57,6 +57,25 @@ function find(id, seasonId) {
         });
 }
 
+function findBySlug(slug) {
+    return database.createQuery(kind)
+        .filter('slug', slug)
+        .run()
+        .then(res => res.length && res[0].length ? res[0][0] : null)
+        .then(entity => {
+            entity.id = entity[database.KEY].id;
+            return entity;
+        });
+}
+
+function anyBySeason(seasonId) {
+    return database.createQuery(kind)
+        .hasAncestor(season.createKey(seasonId))
+        .limit(1)
+        .run()
+        .then(res => res[0].length && res[0][0]);
+}
+
 function insert(chapter, seasonId) {
     if (!chapter.slug) {
         chapter.slug = `chapter-${chapter.number}-${chapter.name.toLowerCase().replace(/\s/g, '-')}`;
@@ -83,6 +102,8 @@ module.exports = {
     all,
     allBySeason,
     find,
+    findBySlug,
+    anyBySeason,
     insert,
     update,
     remove
