@@ -77,7 +77,8 @@ function svg(name, className) {
  */
 function viewHelpers(req, res, next) {
     res.locals.currentUrl = req.url;
-    res.locals.svg = svg
+    res.locals.svg = svg;
+    res.locals.title = null;
     next();
 }
 

@@ -17,6 +17,7 @@ module.exports = app => {
 
     // seasons
     router.get('/seasons/:slug?', SeasonController.index);
+    router.get('/seasons/:id/chapters', SeasonController.chapters);
     router.get('/seasons/:seasonSlug/:chapterSlug', SeasonController.chapter);
 
     // admin
